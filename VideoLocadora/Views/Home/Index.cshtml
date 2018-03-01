@@ -1,0 +1,18 @@
+﻿<script> 
+    var a = 0;    
+    function Cliente()
+    {
+        window.location = "../Clientes/Lista"; 
+    }
+    function Midia() {
+        window.location = "../Midias/Lista";
+    }  
+    function Aluguel() {
+        window.location = "../Alugueis/Lista";
+    } 
+</script>
+<div class="btn-group-vertical" role="group">
+    <button type="button" onclick="Midia()" class="btn btn-secondary">Exibir Midias</button>
+    <button type="button" onclick="Cliente()" class="btn btn-secondary">Exibir Clientes</button>
+    <button type="button" onclick="Aluguel()" class="btn btn-secondary">Exibir Alugueis</button>
+</div>

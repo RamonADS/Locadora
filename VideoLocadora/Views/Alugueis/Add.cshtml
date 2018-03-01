@@ -1,0 +1,49 @@
+﻿<br />
+      ID do Cliente: <input type="text" id="ID_cliente" value=""><br /><br />
+      Retirada: <input type="text" id="Retirada" value="AAAA/MM/DD" onfocus="this.value=''"><br /><br />
+      Devolucao: <input type="text" id="Devolucao" value="AAAA/MM/DD" onfocus="this.value=''"><br /><br />
+      Filme: <select id="Midias"></select><br /><br />
+<input type="button" id="Add" onclick="Add()" value="Adicionar">
+<input type="button" id="Back" onclick="Voltar()" value="Voltar">
+
+<script>
+    exibir();
+    function exibir()
+    {
+        $.ajax({
+            method: "GET",
+            url: "../api/midia/Get/",
+        })
+            .done(function (data) {
+                var htmlRow = [];
+                var tamanho = 0;
+                htmlRow.push('');
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].titulo.length > tamanho) tamanho = data[i].titulo.length;
+                    htmlRow.push('<option value="' + data[i].id + '">' + data[i].titulo + '</option>')
+                }
+                $("#Midias").html(htmlRow);
+            });
+    }
+    function Add()
+    {
+        var r = confirm("Tem certeza que deseja incluir este aluguel?");
+        if (r == true) {
+            var idcliente = $("#ID_cliente").val();
+            var idmidia = $("#Midias").val();
+            var ret = $("#Retirada").val() + 'T00:00:00';
+            var dev = $("#Devolucao").val() + 'T00:00:00';
+            $.ajax({
+                method: "POST",
+                url: "../api/aluguel/Post",
+                data: { ID_Cliente: idcliente, Retirada: ret, Devolucao: dev, CodigosMidias: [idmidia] }
+            }).done(function () {
+                var gr = confirm("Aluguel incluido com sucesso. Deseja voltar?");
+                if (gr == true) { Voltar() }
+            });
+        }
+    }
+    function Voltar() {
+        window.location = "../Alugueis/Lista";
+    }
+</script>

@@ -1,0 +1,61 @@
+﻿<div>    
+    <table id="Midias" class="table table-dark" border="1">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    exibir();
+    function exibir()
+    {  
+        $.ajax({
+            method: "GET",
+            url: "../api/midia/Get/",
+        })
+            .done(function (data) {
+                var htmlRow = [];
+                var tamanho = 0;
+                htmlRow.push('<tr align="center" >' +
+                    '<td align="center" width="70"><b>ID</b></td>' +
+                    '<td align="center" width="280"><b>Titulo</b></td>' +
+                    '<td align="center" width="20"><b>Copias</b></td>' +
+                    '<td align="center" width="80"><b>Acao</b></td>' +
+                    '</tr>');
+
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].titulo.length > tamanho) tamanho = data[i].titulo.length;
+                    htmlRow.push('<tr align="center" >' +
+                        '<td align="center" >' + data[i].id + '</td>' +
+                        '<td align="left" >' + data[i].titulo + '</td>' +
+                        '<td align="center" >' + data[i].copias + '</td>' +
+                        '<td align="center" > <input type="button" class="btn btn-danger" onclick="deletar(' + data[i].id + ')"  id="Del"' + 'value="Del" >' +
+                        '<input type="button" class="btn btn-primary" onclick="Editar(' + data[i].id + ')"  id="Edit"' + 'value="Edit" ></td >' +
+
+                        '</tr>');
+                }
+                htmlRow.push('<tr align="center" > <td align="center" > <button type="button" class="btn btn-success" onclick="Voltar()">Voltar</button> <button type="button" class="btn btn-info" onclick="Adicionar()">Add</td></tr>');
+                $("#Midias").html(htmlRow);                             
+            });
+    }
+    function Voltar() {
+        window.location = "../Home";
+    }
+    function Adicionar() {
+        window.location = "../Midias/Add";
+    }
+    function Editar(id) {
+        window.location = "../Midias/Edit?id=" + id;
+    }
+    function deletar(a) {
+        var r = confirm("Tem certeza que deseja deletar esta midia?");
+        if (r == true) {
+            var id_midia = a;
+            $.ajax({
+                method: "DELETE",
+                url: "../api/midia/Delete?id=" + a
+            }).done(function () { exibir(); });
+        }
+    }
+    
+</script>

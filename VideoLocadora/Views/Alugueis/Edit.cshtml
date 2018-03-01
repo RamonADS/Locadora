@@ -1,0 +1,55 @@
+﻿<script>
+    var full_url = document.URL; // Get current url
+    var url_array = full_url.split('=') // Split the string into an array with / as separator
+    var last_segment = url_array[url_array.length - 1];  // Get the last part of the array (-1)
+    var ID = parseInt(last_segment);
+    var tituloE = "";
+    var copiasE = 0;
+    $.ajax({
+        method: "GET",
+        url: "../api/midia/Get?id=" + ID
+    })
+        .done(function (data) {
+            tituloE = data[0].titulo;
+            copiasE = data[0].copias;
+            $("#Titulo").val(tituloE);
+            $("#Copias").val(copiasE);
+        });
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            Titulo:
+        </div>
+        <div class="col-sm">
+            <input type="text" id="Titulo" value="">
+        </div>
+    </div>
+</div>
+
+    <br /><br /><br />
+    Copias:<input type="text" id="Copias" value=""><br /><br />
+    <input type="button" id="Salvar" onclick="salvar()" value="Salvar">
+    <input type="button" id="Back" onclick="Voltar()" value="Voltar">
+
+    <script>
+        function salvar() {
+            var r = confirm("Tem certeza que deseja alterar esta midia?");
+            if (r) {
+                var title = $("#Titulo").val();
+                var copy = $("#Copias").val();
+                $.ajax({
+                    method: "PUT",
+                    url: "../api/midia/Put",
+                    data: { ID: ID, Titulo: title, Copias: copy }
+                }).done(function () {
+                    var gr = confirm("Midia alterada com sucesso. Deseja voltar?");
+                    if (gr == true) { Voltar() };
+                });
+            }
+        }
+        function Voltar() {
+            window.location = "../Midias/Lista";
+        }
+    </script>

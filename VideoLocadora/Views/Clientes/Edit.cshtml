@@ -1,0 +1,46 @@
+﻿<script>
+    var full_url = document.URL; // Get current url
+    var url_array = full_url.split('=') // Split the string into an array with / as separator
+    var last_segment = url_array[url_array.length - 1];  // Get the last part of the array (-1)
+    var ID = parseInt(last_segment);
+    var NomeE = "";
+    var CPFE = "";
+    $.ajax({
+        method: "GET",
+        url: "../api/cliente/Get?id=" + ID
+    })
+        .done(function (data) {
+            NomeE = data[0].nome;
+            CPFE = data[0].cpf;
+            $("#Nome").val(NomeE);
+            $("#CPF").val(CPFE);
+        });
+</script>
+
+<br />Nome:<input type="text" id="Nome" value=""><br /><br />
+      CPF:<input type="text" id="CPF" value=""><br /><br />
+<input type="button" id="Salvar" onclick="salvar()" value="Salvar">
+<input type="button" id="Back" onclick="Voltar()" value="Voltar">
+
+<script>
+    function salvar()
+    {
+        var r = confirm("Tem certeza que deseja alterar este cliente?");
+        if (r == true)
+        {
+            var name = $("#Nome").val();
+            var cpf_ = $("#CPF").val();
+            $.ajax({
+                method: "PUT",
+                url: "../api/cliente/Put",
+                data: { ID: ID, nome: name, cpf: cpf_ }
+            }).done(function () {
+                var gr = confirm("Cliente alterado com sucesso. Deseja voltar?");
+                if (gr) { Voltar() };
+              });
+        }
+    }
+    function Voltar() {
+        window.location = "../Clientes/Lista";
+    }
+</script>

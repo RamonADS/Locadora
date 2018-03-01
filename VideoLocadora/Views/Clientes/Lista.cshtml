@@ -1,0 +1,55 @@
+﻿<div> 
+    <table id="Clientes" class="table table-dark" border="1">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div> 
+<script> 
+    function exibir()
+    {        
+        $.ajax({
+            method: "GET",
+            url: "../api/cliente/Get/",
+        })
+            .done(function (data) {
+                
+                var htmlRow = [];
+                var tamanho = 0;
+                htmlRow.push('<tr align="center" >' +
+                    '<td align="center" width="100"><b>ID</b></td>' +
+                    '<td align="center" width="280"><b>Nome</b></td>' +
+                    '<td align="center" width="100"><b>CPF</b></td>' +
+                    '<td align="center" width="80"><b>Acao</b></td>' +
+                    '</tr>');
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    htmlRow.push('<tr align="center" >' +
+                                    '<td align="center" >' + data[i].id + '</td>' +
+                                    '<td align="left" >'   + data[i].nome + '</td>' +
+                                    '<td align="center" >' + data[i].cpf + '</td>' +
+                                    '<td align="center" > <input type="button"  class="btn btn-danger" onclick="deletar(' + data[i].id + ')"  id="Del"' + 'value="Del" >' +
+                                                         '<input type="button" class="btn btn-primary" onclick="Editar(' + data[i].id + ')"  id="Edit"' + 'value="Edit" ></td >' +                                        
+                                 '</tr>');
+                }
+                htmlRow.push('<tr align="center" > <td align="center" > <button type="button" class="btn btn-success" onclick="Voltar()">Voltar</button> <button type="button" class="btn btn-info" onclick="Adicionar()">Add</td></tr>');
+                $("#Clientes").html(htmlRow);
+            });
+    } exibir();
+    function Adicionar() {
+        window.location = "../Clientes/Add";
+    }
+    function deletar(a) {
+        var r = confirm("Tem certeza que deseja deletar este cliente?");
+        if (r == true) {
+            var id_midia = a;
+            $.ajax({
+                method: "DELETE",
+                url: "../api/cliente/Delete?id=" + a
+            }).done(function () { exibir(); });
+        }
+    }
+    function Editar(id) {
+        window.location = "../Clientes/Edit?id=" + id;
+    }
+</script>

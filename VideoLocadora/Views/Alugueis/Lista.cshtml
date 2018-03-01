@@ -1,0 +1,71 @@
+﻿<table id="Alugueis"  class="table table-dark" border="1">
+    <thead class="table table-dark">
+
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    exibir();
+    function exibir()
+    {
+        $.ajax({
+            method: "GET",
+            url: "../api/aluguel/Get/",
+        })
+            .done(function (data) {
+                var htmlRow = [];
+                var tamanho = 0;
+                htmlRow.push('<tr align="center" >' +
+                    '<td align="center" ><b>ID</b></td>' +
+                    '<td align="center" ><b>Cliente</b></td>' +
+                    '<td align="center" ><b>Filmes</b></td>' +
+                    '<td align="center" ><b>Retirada</b></td>' +
+                    '<td align="center" ><b>Devolução</b></td>' +   
+                    '<td align="center" ><b>Acao</b></td>' +
+                    '</tr>');                
+                for (var i = 0; i < data.length; i++)
+                {
+                    var s = data[i].retirada.split("T");
+                    var t = data[i].devolucao.split("T");
+                    htmlRow.push('<tr align="center" >' +
+                        '<td align="center" >' + data[i].id + '</td>' +
+                        '<td align="left" >' + data[i].cliente.nome + '</td>' +
+                        '<td align="left" >' + getMidias(data[i].midias) + '</td>' + 
+                        '<td align="center" >' + s[0] + '</td>' + 
+                        '<td align="center" >' + t[0] + '</td>' + 
+                        '<td align="center" > <input type="button" class="btn btn-danger" onclick="deletar(' + data[i].id + ')"  id="Del"' + 'value="Del" >' +                        
+                        '<input type="button"  class="btn btn-primary" onclick="Editar(' + data[i].id + ')"  id="Edit"' + 'value="Edit" ></td >' +
+                        '</tr>');
+                }
+                htmlRow.push('<tr align="center" > <td align="center" > <input type="button" class="btn btn-info" onclick="Adicionar()" id="Adicionar" value="Add"/> </td></tr>');
+               $("#Alugueis").html(htmlRow);
+            });
+    }
+    function Adicionar() {
+        window.location = "../Alugueis/Add";
+    }
+    function Editar(id)
+    {
+        window.location = "../Alugueis/Edit?id=" + id;
+    }
+    function getMidias(data)
+    {
+        var Filmes = [];
+        for (var i = 0; i < data.length; i++)
+        {
+            Filmes.push(data[i].titulo);
+        }
+        return Filmes;        
+    }
+    function deletar(a)
+    {
+        var r = confirm("Tem certeza que deseja deletar este aluguel?");
+        if (r == true) {
+            var id_midia = a;
+            $.ajax({
+                method: "DELETE",
+                url: "../api/aluguel/Delete?id=" + a
+            }).done(function () { exibir(); });
+        }
+    }
+</script>

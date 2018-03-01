@@ -1,0 +1,52 @@
+﻿<script>
+    function Add()
+    {
+        var r = confirm("Tem certeza que deseja incluir esta midia?");
+        if (r == true)
+        {
+            var title = $("#Titulo").val();
+            var copy = $("#Copias").val();
+            $.ajax({
+                method: "POST",
+                url: "../api/midia/Post",
+                data: { Titulo: title, Copias: copy }
+            }).done(function () {
+                var gr = confirm("Midia incluida com sucesso. Deseja voltar?");
+                if (gr == true) { Voltar()}
+                }); 
+        }
+    }
+    function Voltar()
+    {
+        window.location = "../Midias/Lista";
+    }
+</script>
+
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col-1">
+            Titulo:
+        </div>
+        <div class="col-1">
+            <input type="text" id="Titulo" value="">
+        </div>
+    </div>
+    <div class="row align-items-start">
+        <div class="col-1">
+            Copias:
+        </div>
+        <div class="col-1">
+            <input type="text" id="Copias" value="">
+        </div>
+    </div>
+    <div class="row align-items-start">
+        <div class="col-1">
+            <button type="button" class="btn btn-info" onclick="Add()">Add</button>
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-info" onclick="Voltar()">Voltar</button>
+        </div>        
+    </div>
+</div>
+   
+

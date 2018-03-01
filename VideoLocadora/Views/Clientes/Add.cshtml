@@ -1,0 +1,50 @@
+﻿<script>
+    function Add()
+    {
+        var r = confirm("Tem certeza que deseja cadastrar esse cliente?");
+        if (r == true)
+        {
+            var name = $("#Nome").val();
+            var cpf_ = $("#CPF").val();
+            $.ajax({
+                method: "POST",
+                url: "../api/cliente/Post",
+                data: { Nome: name, CPF: cpf_ }
+            }).done(function () {
+                var gr = confirm("Cliente Cadastrado com sucesso. Deseja voltar??");
+                if (gr) { Voltar();}
+                });
+        }
+    }
+    function Voltar()
+    {
+        window.location = "../Clientes/Lista";
+    }
+</script>
+
+<div class="container">   
+    <div class="row align-items-start">
+        <div class="col-1">
+            Nome:
+        </div>
+        <div class="col-1">
+            <input type="text" id="Nome" value="">
+        </div>
+    </div>
+    <div class="row align-items-start">
+        <div class="col-1">
+            CPF:
+        </div>
+        <div class="col-1">
+            <input type="text" id="CPF" value="">
+        </div>
+    </div>
+    <div class="row align-items-start">
+        <div class="col-1">
+            <button type="button" class="btn btn-info" onclick="Add()">Add</button>
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-info" onclick="Voltar()">Voltar</button>
+        </div>
+    </div>
+</div>
